@@ -1,4 +1,5 @@
-public class UsuarioCreate
+
+public class EstudianteUpdate
 {
     public string Nombre { get; set; }
     public string Apellidos { get; set; }
@@ -8,8 +9,5 @@ public class UsuarioCreate
     public string Genero { get; set; }
     public string GradoEstudio { get; set; } = null!;
     public DateTime FechaNacimiento { get; set; }
-    public string Password { get; set; }
-    public string Email { get; set; }
-    public string TipoUsuario { get; set; }
-
+   
 }

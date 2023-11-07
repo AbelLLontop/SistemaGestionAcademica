@@ -1,0 +1,6 @@
+
+public class CarreraCreate
+{
+    public string Nombre { get; set; }
+    public string Descripcion { get; set; }
+}

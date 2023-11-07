@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionAcademica.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231107042120_refactor")]
+    partial class refactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,6 +150,27 @@ namespace GestionAcademica.Migrations
                     b.ToTable("DetallesEvaluacion");
                 });
 
+            modelBuilder.Entity("EstudianteCarrera", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CarreraId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarreraId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("EstudiantesCarrera");
+                });
+
             modelBuilder.Entity("Evaluacion", b =>
                 {
                     b.Property<int>("Id")
@@ -170,31 +194,6 @@ namespace GestionAcademica.Migrations
                         .IsUnique();
 
                     b.ToTable("Evaluaciones");
-                });
-
-            modelBuilder.Entity("Inscripcion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CarreraId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarreraId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Inscripciones");
                 });
 
             modelBuilder.Entity("Matricula", b =>
@@ -352,6 +351,25 @@ namespace GestionAcademica.Migrations
                     b.Navigation("Evaluacion");
                 });
 
+            modelBuilder.Entity("EstudianteCarrera", b =>
+                {
+                    b.HasOne("Carrera", "Carrera")
+                        .WithMany("EstudiantesCarrera")
+                        .HasForeignKey("CarreraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Usuario", "Usuario")
+                        .WithMany("EstudiantesCarrera")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrera");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Evaluacion", b =>
                 {
                     b.HasOne("Asignatura", "Asignatura")
@@ -369,25 +387,6 @@ namespace GestionAcademica.Migrations
                     b.Navigation("Asignatura");
 
                     b.Navigation("Matricula");
-                });
-
-            modelBuilder.Entity("Inscripcion", b =>
-                {
-                    b.HasOne("Carrera", "Carrera")
-                        .WithMany("Inscripciones")
-                        .HasForeignKey("CarreraId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Usuario", "Usuario")
-                        .WithMany("Inscripciones")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Carrera");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Matricula", b =>
@@ -438,7 +437,7 @@ namespace GestionAcademica.Migrations
                 {
                     b.Navigation("AsignaturasCarrera");
 
-                    b.Navigation("Inscripciones");
+                    b.Navigation("EstudiantesCarrera");
                 });
 
             modelBuilder.Entity("Evaluacion", b =>
@@ -456,7 +455,7 @@ namespace GestionAcademica.Migrations
                 {
                     b.Navigation("AsignaturasDocente");
 
-                    b.Navigation("Inscripciones");
+                    b.Navigation("EstudiantesCarrera");
 
                     b.Navigation("Matriculas");
                 });

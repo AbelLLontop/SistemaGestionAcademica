@@ -6,8 +6,7 @@ public class DataContext:DbContext
     {
     }
     public DbSet<Usuario> Usuarios{get;set;}
-    public DbSet<Estudiante> Estudiantes{get;set;}
-    public DbSet<Docente> Docentes{get;set;}
+    public DbSet<Inscripcion> Inscripciones{get;set;}
     public DbSet<Asignatura> Asignaturas{get;set;}
     public DbSet<Carrera> Carreras{get;set;}
     public DbSet<AsignaturaCarrera> AsignaturasCarrera{get;set;}
